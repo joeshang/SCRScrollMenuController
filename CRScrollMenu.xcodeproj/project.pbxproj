@@ -21,6 +21,9 @@
 		D27A58C619A4A5C20083A604 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D27A58A819A4A5C20083A604 /* UIKit.framework */; };
 		D27A58CE19A4A5C20083A604 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D27A58CC19A4A5C20083A604 /* InfoPlist.strings */; };
 		D27A58D019A4A5C20083A604 /* CRScrollMenuTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D27A58CF19A4A5C20083A604 /* CRScrollMenuTests.m */; };
+		D27A58DB19A4A6050083A604 /* CRScrollMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = D27A58DA19A4A6050083A604 /* CRScrollMenu.m */; };
+		D27A58E419AA1CBC0083A604 /* CRScrollMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D27A58E319AA1CBC0083A604 /* CRScrollMenuButton.m */; };
+		D27A58E619AA46960083A604 /* scrollmenu_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D27A58E519AA46960083A604 /* scrollmenu_background@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,11 @@
 		D27A58CB19A4A5C20083A604 /* CRScrollMenuTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CRScrollMenuTests-Info.plist"; sourceTree = "<group>"; };
 		D27A58CD19A4A5C20083A604 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D27A58CF19A4A5C20083A604 /* CRScrollMenuTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CRScrollMenuTests.m; sourceTree = "<group>"; };
+		D27A58D919A4A6050083A604 /* CRScrollMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRScrollMenu.h; path = CRScrollMenu/CRScrollMenu.h; sourceTree = "<group>"; };
+		D27A58DA19A4A6050083A604 /* CRScrollMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRScrollMenu.m; path = CRScrollMenu/CRScrollMenu.m; sourceTree = "<group>"; };
+		D27A58E219AA1CBC0083A604 /* CRScrollMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRScrollMenuButton.h; path = CRScrollMenu/CRScrollMenuButton.h; sourceTree = "<group>"; };
+		D27A58E319AA1CBC0083A604 /* CRScrollMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRScrollMenuButton.m; path = CRScrollMenu/CRScrollMenuButton.m; sourceTree = "<group>"; };
+		D27A58E519AA46960083A604 /* scrollmenu_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scrollmenu_background@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,7 +125,9 @@
 				D27A58B619A4A5C20083A604 /* Main.storyboard */,
 				D27A58B919A4A5C20083A604 /* CRViewController.h */,
 				D27A58BA19A4A5C20083A604 /* CRViewController.m */,
+				D27A58DC19A4A60A0083A604 /* CRScrollMenu */,
 				D27A58BC19A4A5C20083A604 /* Images.xcassets */,
+				D27A58E519AA46960083A604 /* scrollmenu_background@2x.png */,
 				D27A58AB19A4A5C20083A604 /* Supporting Files */,
 			);
 			path = CRScrollMenu;
@@ -150,6 +160,17 @@
 				D27A58CC19A4A5C20083A604 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D27A58DC19A4A60A0083A604 /* CRScrollMenu */ = {
+			isa = PBXGroup;
+			children = (
+				D27A58D919A4A6050083A604 /* CRScrollMenu.h */,
+				D27A58DA19A4A6050083A604 /* CRScrollMenu.m */,
+				D27A58E219AA1CBC0083A604 /* CRScrollMenuButton.h */,
+				D27A58E319AA1CBC0083A604 /* CRScrollMenuButton.m */,
+			);
+			name = CRScrollMenu;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,6 +250,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D27A58E619AA46960083A604 /* scrollmenu_background@2x.png in Resources */,
 				D27A58BD19A4A5C20083A604 /* Images.xcassets in Resources */,
 				D27A58AF19A4A5C20083A604 /* InfoPlist.strings in Resources */,
 				D27A58B819A4A5C20083A604 /* Main.storyboard in Resources */,
@@ -252,6 +274,8 @@
 			files = (
 				D27A58B119A4A5C20083A604 /* main.m in Sources */,
 				D27A58B519A4A5C20083A604 /* CRAppDelegate.m in Sources */,
+				D27A58DB19A4A6050083A604 /* CRScrollMenu.m in Sources */,
+				D27A58E419AA1CBC0083A604 /* CRScrollMenuButton.m in Sources */,
 				D27A58BB19A4A5C20083A604 /* CRViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

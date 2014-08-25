@@ -10,4 +10,7 @@
 
 @interface CRViewController : UIViewController
 
+- (IBAction)onAddButtonClicked:(id)sender;
+- (IBAction)onRemoveButtonClicked:(id)sender;
+
 @end
