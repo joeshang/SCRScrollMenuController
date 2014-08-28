@@ -13,19 +13,52 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
+    
+    if (self)
+    {
     }
+    
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (void)setNormalTitleAttributes:(NSDictionary *)normalTitleAttributes
 {
-    // Drawing code
+    _normalTitleAttributes = normalTitleAttributes;
+    [self setTitleColor:normalTitleAttributes[NSForegroundColorAttributeName] forState:UIControlStateNormal];
+    if (self.isSelected == NO)
+    {
+        self.titleLabel.font = normalTitleAttributes[NSFontAttributeName];
+    }
 }
-*/
+
+- (void)setSelectedTitleAttributes:(NSDictionary *)selectedTitleAttributes
+{
+    _selectedTitleAttributes = selectedTitleAttributes;
+    [self setTitleColor:selectedTitleAttributes[NSForegroundColorAttributeName] forState:UIControlStateSelected];
+    if (self.isSelected == YES)
+    {
+        self.titleLabel.font = selectedTitleAttributes[NSFontAttributeName];
+    }
+}
+
+- (void)setSelected:(BOOL)selected
+{
+    [super setSelected:selected];
+    
+    if (selected)
+    {
+        if (self.selectedTitleAttributes[NSFontAttributeName])
+        {
+            self.titleLabel.font = self.selectedTitleAttributes[NSFontAttributeName];
+        }
+    }
+    else
+    {
+        if (self.normalTitleAttributes[NSFontAttributeName])
+        {
+            self.titleLabel.font = self.normalTitleAttributes[NSFontAttributeName];
+        }
+    }
+}
 
 @end

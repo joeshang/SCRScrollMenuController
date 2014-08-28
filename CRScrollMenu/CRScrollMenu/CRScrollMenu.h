@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CRScrollMenuButton.h"
 
 @class CRScrollMenu;
 @protocol CRScrollMenuDelegate <NSObject>
@@ -22,9 +21,10 @@
 @property (nonatomic, strong) NSMutableArray *itemViews;
 @property (nonatomic, assign) id<CRScrollMenuDelegate> delegate;
 
-- (id)initWithFrame:(CGRect)frame andItemViews:(NSArray *)itemViews;
+- (id)initWithFrame:(CGRect)frame;
+- (id)initWithFrame:(CGRect)frame andItemViews:(NSMutableArray *)itemViews;
 
-- (void)insertObject:(CRScrollMenuButton *)object inItemViewsAtIndex:(NSUInteger)index;
+- (void)insertObject:(UIControl*)object inItemViewsAtIndex:(NSUInteger)index;
 - (void)removeObjectFromItemViewsAtIndex:(NSUInteger)index;
 
 - (void)scrollToIndex:(NSUInteger)index;

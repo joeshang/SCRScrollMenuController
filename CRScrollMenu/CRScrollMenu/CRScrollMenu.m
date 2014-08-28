@@ -8,9 +8,10 @@
 
 #import "CRScrollMenu.h"
 
-#define kCRScrollMenuButtonPaddingX         8.0
-#define kCRScrollMenuIndicatorHeight        4.0
-#define kCRScrollMenuScrollAnimationTime    0.3
+#define kCRScrollMenuButtonPaddingX                 8.0
+#define kCRScrollMenuScrollAnimationTime            0.3
+#define kCRScrollMenuIndicatorHeight                4.0
+#define kCRScrollMenuIndicatorColor                 [UIColor colorWithRed:255 green:0 blue:0 alpha:1]
 
 @interface CRScrollMenu()
 
@@ -25,44 +26,53 @@
 
 #pragma mark - life cycle
 
-- (id)initWithFrame:(CGRect)frame andItemViews:(NSArray *)itemViews
+- (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     
     if (self)
     {
-        _currentIndex = 0;
+        [self commonSetup];
         
-        _contentView = [[UIScrollView alloc] initWithFrame:self.bounds];
-        _contentView.showsHorizontalScrollIndicator = NO;
-        _contentView.backgroundColor = [UIColor clearColor];
-        [self addSubview:_contentView];
-        
-        _itemViews = [NSMutableArray arrayWithArray:itemViews];
-        for (CRScrollMenuButton *itemView in itemViews)
-        {
-            [_contentView addSubview:itemView];
-            [itemView addTarget:self
-                         action:@selector(onItemViewClicked:)
-               forControlEvents:UIControlEventTouchUpInside];
-        }
-        
-        _indicatorView = [[UIView alloc] init];
-        _indicatorView.backgroundColor = [UIColor redColor];
-        [_contentView addSubview:_indicatorView];
-        
-        [self layoutItemViews];
+        _itemViews = [[NSMutableArray alloc] init];
     }
     
     return self;
 }
 
-#pragma mark -
+- (id)initWithFrame:(CGRect)frame andItemViews:(NSMutableArray *)itemViews
+{
+    self = [super initWithFrame:frame];
+    
+    if (self)
+    {
+        [self commonSetup];
+        
+        [self setItemViews:itemViews];
+    }
+    
+    return self;
+}
+
+- (void)commonSetup
+{
+    _currentIndex = 0;
+    
+    _contentView = [[UIScrollView alloc] initWithFrame:self.bounds];
+    _contentView.showsHorizontalScrollIndicator = NO;
+    _contentView.backgroundColor = [UIColor clearColor];
+    [self addSubview:_contentView];
+    
+    _indicatorView = [[UIView alloc] init];
+    _indicatorView.backgroundColor = kCRScrollMenuIndicatorColor;
+    [_contentView addSubview:_indicatorView];
+}
+
+#pragma mark - view related
 
 - (void)layoutItemViews
 {
     CGFloat x = kCRScrollMenuButtonPaddingX;
-    NSUInteger index = 0;
     
     for (UIView *itemView in self.itemViews)
     {
@@ -72,41 +82,126 @@
         rect.size.height = self.bounds.size.height;
         itemView.frame = rect;
         
-        if (index == self.currentIndex)
-        {
-            self.indicatorView.frame = CGRectMake(rect.origin.x,
-                                                  rect.origin.y + rect.size.height - kCRScrollMenuIndicatorHeight,
-                                                  rect.size.width,
-                                                  kCRScrollMenuIndicatorHeight);
-        }
-        index++;
-        
         x += rect.size.width;
         x += kCRScrollMenuButtonPaddingX;
     }
 
+    [self setIndicatorAtIndex:self.currentIndex];
     self.contentView.contentSize = CGSizeMake(x, CGRectGetHeight(self.bounds));
 }
 
-- (void)insertObject:(CRScrollMenuButton *)object inItemViewsAtIndex:(NSUInteger)index
+- (void)setIndicatorAtIndex:(NSUInteger)index
+{
+    if ([self.itemViews count] == 0)
+    {
+        self.indicatorView.frame = CGRectZero;
+    }
+    else
+    {
+        CGRect rect = [[self.itemViews objectAtIndex:index] frame];
+        CGRect indicatorRect = CGRectMake(rect.origin.x,
+                                          rect.origin.y + rect.size.height - kCRScrollMenuIndicatorHeight,
+                                          rect.size.width,
+                                          kCRScrollMenuIndicatorHeight);
+        self.indicatorView.frame = indicatorRect;
+    }
+}
+
+- (void)moveItemFromIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex
+{
+    // 修改item的显示状态
+    [[self.itemViews objectAtIndex:oldIndex] setSelected:NO];
+    [[self.itemViews objectAtIndex:newIndex] setSelected:YES];
+    
+    // 调整indicatorView，使其指向对应item
+    [self setIndicatorAtIndex:newIndex];
+}
+
+- (void)setBackgroundImage:(UIImage *)backgroundImage
+{
+    if (_backgroundImageView == nil)
+    {
+        _backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        [self insertSubview:_backgroundImageView belowSubview:self.contentView];
+    }
+    
+    _backgroundImage = backgroundImage;
+    _backgroundImageView.image = backgroundImage;
+}
+
+#pragma mark - action
+
+- (void)scrollToIndex:(NSUInteger)index
+{
+    CGRect rect = [[self.itemViews objectAtIndex:index] frame];
+    
+    CGPoint contentOffset = self.contentView.contentOffset;
+    if (CGRectGetMinX(rect) < contentOffset.x)
+    {
+        contentOffset.x = CGRectGetMinX(rect) - kCRScrollMenuButtonPaddingX;
+    }
+    else if (CGRectGetMaxX(rect) > contentOffset.x + self.bounds.size.width)
+    {
+        contentOffset.x += CGRectGetMaxX(rect) - contentOffset.x - self.bounds.size.width + kCRScrollMenuButtonPaddingX;
+    }
+    [UIView animateWithDuration:kCRScrollMenuScrollAnimationTime animations:^{
+        _contentView.contentOffset = contentOffset;
+    }];
+    
+    __weak CRScrollMenu *weakSelf = self;
+    [UIView animateWithDuration:kCRScrollMenuScrollAnimationTime animations:^{
+        [weakSelf moveItemFromIndex:weakSelf.currentIndex toIndex:index];
+    }];
+    
+    self.currentIndex = index;
+}
+
+- (void)onItemViewClicked:(id)sender
+{
+    NSUInteger index = [self.itemViews indexOfObjectIdenticalTo:sender];
+    
+    [self scrollToIndex:index];
+    
+    if (self.delegate
+        && [self.delegate performSelector:@selector(scrollMenu:didSelectedAtIndex:)])
+    {
+        [self.delegate scrollMenu:self didSelectedAtIndex:index];
+    }
+}
+
+#pragma mark - object management
+
+- (void)insertObject:(UIControl *)object inItemViewsAtIndex:(NSUInteger)index
 {
     [self.contentView addSubview:object];
     [object addTarget:self
                action:@selector(onItemViewClicked:)
      forControlEvents:UIControlEventTouchUpInside];
     
-    CRScrollMenuButton *currentIndexItem = [self.itemViews objectAtIndex:self.currentIndex];
-    [self.itemViews insertObject:object atIndex:index];
-    self.currentIndex = [self.itemViews indexOfObjectIdenticalTo:currentIndexItem];
+    if ([self.itemViews count] == 0)
+    {
+        [self.itemViews addObject:object];
+    }
+    else
+    {
+        UIControl *currentIndexItem = [self.itemViews objectAtIndex:self.currentIndex];
+        [self.itemViews insertObject:object atIndex:index];
+        self.currentIndex = [self.itemViews indexOfObjectIdenticalTo:currentIndexItem];
+    }
     
     [self layoutItemViews];
 }
 
 - (void)removeObjectFromItemViewsAtIndex:(NSUInteger)index
 {
+    if ([self.itemViews count] == 0)
+    {
+        return;
+    }
+    
     [[self.itemViews objectAtIndex:index] removeFromSuperview];
     
-    CRScrollMenuButton *currentIndexItem = [self.itemViews objectAtIndex:self.currentIndex];
+    UIControl *currentIndexItem = [self.itemViews objectAtIndex:self.currentIndex];
     [self.itemViews removeObjectAtIndex:index];
     if (index == self.currentIndex)
     {
@@ -120,69 +215,29 @@
     [self layoutItemViews];
 }
 
-#pragma mark - action
-
-- (void)scrollToIndex:(NSUInteger)index
+- (void)setItemViews:(NSMutableArray *)itemViews
 {
-    CGRect rect = [[self.itemViews objectAtIndex:index] frame];
-    
-    CGPoint contentOffset = self.contentView.contentOffset;
-    if (CGRectGetMinX(rect) < contentOffset.x)
+    if (_itemViews != nil)
     {
-        contentOffset.x = CGRectGetMinX(rect);
-    }
-    else if (CGRectGetMaxX(rect) > contentOffset.x + self.bounds.size.width)
-    {
-        contentOffset.x += CGRectGetMaxX(rect) - contentOffset.x - self.bounds.size.width;
-    }
-    [UIView animateWithDuration:kCRScrollMenuScrollAnimationTime animations:^{
-        _contentView.contentOffset = contentOffset;
-    }];
-    
-    if (index != self.currentIndex)
-    {
-        CGRect indicatorRect = CGRectMake(rect.origin.x,
-                                          rect.origin.y + rect.size.height - kCRScrollMenuIndicatorHeight,
-                                          rect.size.width,
-                                          kCRScrollMenuIndicatorHeight);
-        [UIView animateWithDuration:kCRScrollMenuScrollAnimationTime animations:^{
-            _indicatorView.frame = indicatorRect;
-        }];
-        
-        self.currentIndex = index;
-    }
-}
-
-- (void)onItemViewClicked:(id)sender
-{
-    NSUInteger index = [self.itemViews indexOfObjectIdenticalTo:sender];
-    
-    NSLog(@"clicked at index: %ld", index);
-    
-    [self scrollToIndex:index];
-    
-    if (index != self.currentIndex)
-    {
-        if (self.delegate
-            && [self.delegate performSelector:@selector(scrollMenu:didSelectedAtIndex:)])
+        for (UIControl *itemView in _itemViews)
         {
-            [self.delegate scrollMenu:self didSelectedAtIndex:index];
+            [itemView removeFromSuperview];
         }
     }
-}
-
-#pragma mark - getter & setter
-
-- (void)setBackgroundImage:(UIImage *)backgroundImage
-{
-    if (_backgroundImageView == nil)
-    {
-        _backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
-        [self insertSubview:_backgroundImageView belowSubview:self.contentView];
-    }
     
-    _backgroundImage = backgroundImage;
-    _backgroundImageView.image = backgroundImage;
+    self.currentIndex = 0;
+    
+    _itemViews = [NSMutableArray arrayWithArray:itemViews];
+    for (UIControl *itemView in itemViews)
+    {
+        [self.contentView addSubview:itemView];
+        [itemView addTarget:self
+                     action:@selector(onItemViewClicked:)
+           forControlEvents:UIControlEventTouchUpInside];
+    }
+    [[_itemViews objectAtIndex:self.currentIndex] setSelected:YES];
+    
+    [self layoutItemViews];
 }
 
 @end

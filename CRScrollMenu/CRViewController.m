@@ -7,6 +7,7 @@
 //
 
 #import "CRViewController.h"
+#import "CRScrollMenuButton.h"
 #import "CRScrollMenu.h"
 
 @interface CRViewController ()
@@ -22,20 +23,24 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     NSArray *titles = [NSArray arrayWithObjects:@"测试一", @"测试二", @"测试三", @"测试四", @"测试五", @"测试六", @"测试七", nil];
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20]};
+    NSDictionary *normalAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20],
+                                       NSForegroundColorAttributeName: [UIColor whiteColor]};
+    NSDictionary *selectedAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:22],
+                                         NSForegroundColorAttributeName: [UIColor yellowColor]};
     NSMutableArray *itemViews = [NSMutableArray arrayWithCapacity:titles.count];
     for (NSString *title in titles)
     {
         CGRect buttonRect = CGRectZero;
-        CGSize size = [title sizeWithAttributes:attributes];
+        CGSize size = [title sizeWithAttributes:selectedAttributes];
         buttonRect.size = size;
         CRScrollMenuButton *button = [[CRScrollMenuButton alloc] initWithFrame:buttonRect];
+        button.normalTitleAttributes = normalAttributes;
+        button.selectedTitleAttributes = selectedAttributes;
         [button setTitle:title forState:UIControlStateNormal];
         [itemViews addObject:button];
     }
     CGRect rect = CGRectMake(0, 60, CGRectGetWidth(self.view.bounds), 60);
     self.menu = [[CRScrollMenu alloc] initWithFrame:rect andItemViews:itemViews];
-//    self.menu.backgroundColor = [UIColor blueColor];
     self.menu.backgroundImage = [UIImage imageNamed:@"scrollmenu_background"];
     
     [self.view addSubview:self.menu];
@@ -47,6 +52,7 @@
     buttonRect.size.width = 100;
     CRScrollMenuButton *button = [[CRScrollMenuButton alloc] initWithFrame:buttonRect];
     [button setTitle:@"测试增" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
     
     [self.menu insertObject:button inItemViewsAtIndex:0];
 }

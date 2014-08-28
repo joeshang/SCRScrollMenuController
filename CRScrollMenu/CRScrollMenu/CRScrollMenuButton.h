@@ -10,4 +10,7 @@
 
 @interface CRScrollMenuButton : UIButton
 
+@property (nonatomic, strong) NSDictionary *normalTitleAttributes;
+@property (nonatomic, strong) NSDictionary *selectedTitleAttributes;
+
 @end
