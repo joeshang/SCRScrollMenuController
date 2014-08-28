@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CRScrollMenu.h"
 
 @interface CRViewController : UIViewController
+<CRScrollMenuDelegate>
 
 - (IBAction)onAddButtonClicked:(id)sender;
 - (IBAction)onRemoveButtonClicked:(id)sender;

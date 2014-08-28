@@ -19,7 +19,7 @@
 
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic, strong) NSMutableArray *itemViews;
-@property (nonatomic, assign) id<CRScrollMenuDelegate> delegate;
+@property (nonatomic, weak)   id<CRScrollMenuDelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame;
 - (id)initWithFrame:(CGRect)frame andItemViews:(NSMutableArray *)itemViews;

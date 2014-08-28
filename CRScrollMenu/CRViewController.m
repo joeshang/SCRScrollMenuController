@@ -8,7 +8,6 @@
 
 #import "CRViewController.h"
 #import "CRScrollMenuButton.h"
-#import "CRScrollMenu.h"
 
 @interface CRViewController ()
 
@@ -42,8 +41,14 @@
     CGRect rect = CGRectMake(0, 60, CGRectGetWidth(self.view.bounds), 60);
     self.menu = [[CRScrollMenu alloc] initWithFrame:rect andItemViews:itemViews];
     self.menu.backgroundImage = [UIImage imageNamed:@"scrollmenu_background"];
+    self.menu.delegate = self;
     
     [self.view addSubview:self.menu];
+}
+
+- (void)scrollMenu:(CRScrollMenu *)scrollMenu didSelectedAtIndex:(NSUInteger)index
+{
+    NSLog(@"scroll menu selected at index: %ld", index);
 }
 
 - (IBAction)onAddButtonClicked:(id)sender

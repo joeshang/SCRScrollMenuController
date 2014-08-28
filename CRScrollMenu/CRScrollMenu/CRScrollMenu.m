@@ -163,7 +163,7 @@
     [self scrollToIndex:index];
     
     if (self.delegate
-        && [self.delegate performSelector:@selector(scrollMenu:didSelectedAtIndex:)])
+        && [self.delegate respondsToSelector:@selector(scrollMenu:didSelectedAtIndex:)])
     {
         [self.delegate scrollMenu:self didSelectedAtIndex:index];
     }
