@@ -40,6 +40,7 @@
     }
     CGRect rect = CGRectMake(0, 60, CGRectGetWidth(self.view.bounds), 60);
     self.menu = [[CRScrollMenu alloc] initWithFrame:rect andItemViews:itemViews];
+    self.menu.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.menu.backgroundImage = [UIImage imageNamed:@"scrollmenu_background"];
     self.menu.delegate = self;
     

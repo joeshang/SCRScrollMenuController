@@ -481,6 +481,7 @@
 				D27A58D519A4A5C20083A604 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D27A58D619A4A5C20083A604 /* Build configuration list for PBXNativeTarget "CRScrollMenuTests" */ = {
 			isa = XCConfigurationList;
@@ -489,6 +490,7 @@
 				D27A58D819A4A5C20083A604 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -59,12 +59,14 @@
     _currentIndex = 0;
     
     _contentView = [[UIScrollView alloc] initWithFrame:self.bounds];
+    _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _contentView.showsHorizontalScrollIndicator = NO;
     _contentView.backgroundColor = [UIColor clearColor];
     [self addSubview:_contentView];
     
     _indicatorView = [[UIView alloc] init];
     _indicatorView.backgroundColor = kCRScrollMenuIndicatorColor;
+    _indicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [_contentView addSubview:_indicatorView];
 }
 
@@ -122,6 +124,7 @@
     if (_backgroundImageView == nil)
     {
         _backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self insertSubview:_backgroundImageView belowSubview:self.contentView];
     }
     
@@ -145,12 +148,11 @@
         contentOffset.x += CGRectGetMaxX(rect) - contentOffset.x - self.bounds.size.width + kCRScrollMenuButtonPaddingX;
     }
     [UIView animateWithDuration:kCRScrollMenuScrollAnimationTime animations:^{
-        _contentView.contentOffset = contentOffset;
+        self.contentView.contentOffset = contentOffset;
     }];
     
-    __weak CRScrollMenu *weakSelf = self;
     [UIView animateWithDuration:kCRScrollMenuScrollAnimationTime animations:^{
-        [weakSelf moveItemFromIndex:weakSelf.currentIndex toIndex:index];
+        [self moveItemFromIndex:self.currentIndex toIndex:index];
     }];
     
     self.currentIndex = index;
@@ -173,10 +175,7 @@
 
 - (void)insertObject:(UIControl *)object inItemViewsAtIndex:(NSUInteger)index
 {
-    [self.contentView addSubview:object];
-    [object addTarget:self
-               action:@selector(onItemViewClicked:)
-     forControlEvents:UIControlEventTouchUpInside];
+    [self setupItemView:object];
     
     if ([self.itemViews count] == 0)
     {
@@ -230,14 +229,20 @@
     _itemViews = [NSMutableArray arrayWithArray:itemViews];
     for (UIControl *itemView in itemViews)
     {
-        [self.contentView addSubview:itemView];
-        [itemView addTarget:self
-                     action:@selector(onItemViewClicked:)
-           forControlEvents:UIControlEventTouchUpInside];
+        [self setupItemView:itemView];
     }
     [[_itemViews objectAtIndex:self.currentIndex] setSelected:YES];
     
     [self layoutItemViews];
+}
+
+- (void)setupItemView:(UIControl *)itemView
+{
+    itemView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    [itemView addTarget:self
+                 action:@selector(onItemViewClicked:)
+       forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:itemView];
 }
 
 @end
