@@ -22,29 +22,24 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     NSArray *titles = [NSArray arrayWithObjects:@"测试一", @"测试二", @"测试三", @"测试四", @"测试五", @"测试六", @"测试七", nil];
-    NSDictionary *normalAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20],
-                                       NSForegroundColorAttributeName: [UIColor whiteColor]};
-    NSDictionary *selectedAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:22],
-                                         NSForegroundColorAttributeName: [UIColor yellowColor]};
-    NSMutableArray *itemViews = [NSMutableArray arrayWithCapacity:titles.count];
-    for (NSString *title in titles)
-    {
-        CGRect buttonRect = CGRectZero;
-        CGSize size = [title sizeWithAttributes:selectedAttributes];
-        buttonRect.size = size;
-        CRScrollMenuButton *button = [[CRScrollMenuButton alloc] initWithFrame:buttonRect];
-        button.normalTitleAttributes = normalAttributes;
-        button.selectedTitleAttributes = selectedAttributes;
-        button.title = title;
-        button.subtitle = @"testing";
-        [itemViews addObject:button];
-    }
-    CGRect rect = CGRectMake(0, 60, CGRectGetWidth(self.view.bounds), 60);
-    self.menu = [[CRScrollMenu alloc] initWithFrame:rect andItemViews:itemViews];
+    NSMutableArray *items = [NSMutableArray arrayWithCapacity:titles.count];
+    [titles enumerateObjectsUsingBlock:^(NSString *title, NSUInteger index, BOOL *stop){
+        CRScrollMenuItem *item = [[CRScrollMenuItem alloc] init];
+        item.title = title;
+        item.subtitle = [NSString stringWithFormat:@"subtitle%ld", index + 1];
+        [items addObject:item];
+    }];
+    CGRect rect = CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 60);
+    self.menu = [[CRScrollMenu alloc] initWithFrame:rect];
     self.menu.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.menu.backgroundImage = [UIImage imageNamed:@"scrollmenu_background"];
     self.menu.delegate = self;
-    
+    self.menu.buttonPadding = 14;
+    self.menu.normalTitleAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:18],
+                                        NSForegroundColorAttributeName: [UIColor whiteColor]};
+    self.menu.selectedTitleAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20],
+                                          NSForegroundColorAttributeName: [UIColor yellowColor]};
+    [self.menu setButtonsByItems:items];
     [self.view addSubview:self.menu];
 }
 
@@ -55,17 +50,15 @@
 
 - (IBAction)onAddButtonClicked:(id)sender
 {
-    CGRect buttonRect = CGRectZero;
-    buttonRect.size.width = 100;
-    CRScrollMenuButton *button = [[CRScrollMenuButton alloc] initWithFrame:buttonRect];
-    button.title = @"测试增加";
+    CRScrollMenuItem *item = [[CRScrollMenuItem alloc] init];
+    item.title = @"测试增加";
     
-    [self.menu insertObject:button inItemViewsAtIndex:0];
+    [self.menu insertButtonByItem:item atIndex:0];
 }
 
 - (IBAction)onRemoveButtonClicked:(id)sender
 {
-    [self.menu removeObjectFromItemViewsAtIndex:0];
+    [self.menu removeButtonAtIndex:0];
 }
 
 @end

@@ -7,16 +7,19 @@
 //
 
 #import "CRScrollMenu.h"
+#import "CRScrollMenuButton.h"
 
-#define kCRScrollMenuButtonPaddingX                 8.0
 #define kCRScrollMenuScrollAnimationTime            0.3
-#define kCRScrollMenuIndicatorHeight                4.0
-#define kCRScrollMenuIndicatorColor                 [UIColor colorWithRed:255 green:0 blue:0 alpha:1]
+#define kCRScrollMenuIndicatorMargin                5.0
+#define kCRScrollMenuDefaultButtonPadding           8.0
+#define kCRScrollMenuDefaultIndicatorHeight         4.0
+#define kCRScrollMenuDefaultIndicatorColor          [UIColor redColor]
 
 @interface CRScrollMenu()
 
 @property (nonatomic, strong) UIScrollView *contentView;
 @property (nonatomic, strong) UIView *indicatorView;
+@property (nonatomic, strong) NSMutableArray *buttons;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, assign) NSUInteger currentIndex;
 
@@ -38,15 +41,13 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame andItemViews:(NSMutableArray *)itemViews
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithFrame:frame];
+    self = [super initWithCoder:aDecoder];
     
     if (self)
     {
         [self commonSetup];
-        
-        [self setItemViews:itemViews];
     }
     
     return self;
@@ -55,6 +56,22 @@
 - (void)commonSetup
 {
     _currentIndex = 0;
+    _buttons = [[NSMutableArray alloc] init];
+
+    _buttonPadding = kCRScrollMenuDefaultButtonPadding;
+    _indicatorColor = kCRScrollMenuDefaultIndicatorColor;
+    _indicatorHeight = kCRScrollMenuDefaultIndicatorHeight;
+    
+    _normalTitleAttributes = @{
+                               NSFontAttributeName: [UIFont systemFontOfSize:17],
+                               NSForegroundColorAttributeName: [UIColor redColor]
+                               };
+    _normalSubtitleAttributes = @{
+                                  NSFontAttributeName: [UIFont systemFontOfSize:12],
+                                  NSForegroundColorAttributeName: [UIColor blueColor]
+                                  };
+    _selectedTitleAttributes = [_normalTitleAttributes copy];
+    _selectedSubtitleAttributes = [_normalSubtitleAttributes copy];
     
     _contentView = [[UIScrollView alloc] initWithFrame:self.bounds];
     _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -63,27 +80,26 @@
     [self addSubview:_contentView];
     
     _indicatorView = [[UIView alloc] init];
-    _indicatorView.backgroundColor = kCRScrollMenuIndicatorColor;
+    _indicatorView.backgroundColor = kCRScrollMenuDefaultIndicatorColor;
     _indicatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [_contentView addSubview:_indicatorView];
 }
 
 #pragma mark - view related
 
-- (void)layoutItemViews
+- (void)layoutSubviews
 {
-    CGFloat x = kCRScrollMenuButtonPaddingX;
+    CGFloat x = 0.0;
     
-    for (UIView *itemView in self.itemViews)
+    for (CRScrollMenuButton *button in self.buttons)
     {
-        CGRect rect = itemView.frame;
+        CGRect rect = button.frame;
         rect.origin.x = x;
         rect.origin.y = 0.0;
         rect.size.height = self.bounds.size.height;
-        itemView.frame = rect;
+        button.frame = rect;
         
         x += rect.size.width;
-        x += kCRScrollMenuButtonPaddingX;
     }
 
     [self setIndicatorAtIndex:self.currentIndex];
@@ -92,58 +108,45 @@
 
 - (void)setIndicatorAtIndex:(NSUInteger)index
 {
-    if ([self.itemViews count] == 0)
+    if ([self.buttons count] == 0)
     {
         self.indicatorView.frame = CGRectZero;
     }
     else
     {
-        CGRect rect = [[self.itemViews objectAtIndex:index] frame];
-        CGRect indicatorRect = CGRectMake(rect.origin.x,
-                                          rect.origin.y + rect.size.height - kCRScrollMenuIndicatorHeight,
-                                          rect.size.width,
-                                          kCRScrollMenuIndicatorHeight);
+        // 设置indicator的frame
+        CGRect rect = [[self.buttons objectAtIndex:index] frame];
+        CGRect indicatorRect = CGRectMake(rect.origin.x + self.buttonPadding - kCRScrollMenuIndicatorMargin,
+                                          rect.origin.y + rect.size.height - self.indicatorHeight,
+                                          rect.size.width - (self.buttonPadding - kCRScrollMenuIndicatorMargin) * 2,
+                                          self.indicatorHeight);
         self.indicatorView.frame = indicatorRect;
+        
+        // index对应的button设置为selected
+        [[self.buttons objectAtIndex:index] setSelected:YES];
     }
 }
 
 - (void)moveItemFromIndex:(NSUInteger)oldIndex toIndex:(NSUInteger)newIndex
 {
-    // 修改item的显示状态
-    [[self.itemViews objectAtIndex:oldIndex] setSelected:NO];
-    [[self.itemViews objectAtIndex:newIndex] setSelected:YES];
-    
-    // 调整indicatorView，使其指向对应item
+    [[self.buttons objectAtIndex:oldIndex] setSelected:NO];
     [self setIndicatorAtIndex:newIndex];
-}
-
-- (void)setBackgroundImage:(UIImage *)backgroundImage
-{
-    if (_backgroundImageView == nil)
-    {
-        _backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
-        _backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [self insertSubview:_backgroundImageView belowSubview:self.contentView];
-    }
-    
-    _backgroundImage = backgroundImage;
-    _backgroundImageView.image = backgroundImage;
 }
 
 #pragma mark - action
 
 - (void)scrollToIndex:(NSUInteger)index
 {
-    CGRect rect = [[self.itemViews objectAtIndex:index] frame];
+    CGRect rect = [[self.buttons objectAtIndex:index] frame];
     
     CGPoint contentOffset = self.contentView.contentOffset;
     if (CGRectGetMinX(rect) < contentOffset.x)
     {
-        contentOffset.x = CGRectGetMinX(rect) - kCRScrollMenuButtonPaddingX;
+        contentOffset.x = CGRectGetMinX(rect);
     }
     else if (CGRectGetMaxX(rect) > contentOffset.x + self.bounds.size.width)
     {
-        contentOffset.x += CGRectGetMaxX(rect) - contentOffset.x - self.bounds.size.width + kCRScrollMenuButtonPaddingX;
+        contentOffset.x += CGRectGetMaxX(rect) - contentOffset.x - self.bounds.size.width;
     }
     [UIView animateWithDuration:kCRScrollMenuScrollAnimationTime animations:^{
         self.contentView.contentOffset = contentOffset;
@@ -158,7 +161,7 @@
 
 - (void)onItemViewClicked:(id)sender
 {
-    NSUInteger index = [self.itemViews indexOfObjectIdenticalTo:sender];
+    NSUInteger index = [self.buttons indexOfObjectIdenticalTo:sender];
     
     [self scrollToIndex:index];
     
@@ -171,81 +174,147 @@
 
 #pragma mark - object management
 
-- (void)insertObject:(UIControl *)object inItemViewsAtIndex:(NSUInteger)index
+- (void)setButtonsByItems:(NSArray *)items
 {
-    [self setupItemView:object];
-    
-    if ([self.itemViews count] == 0)
-    {
-        [self.itemViews addObject:object];
-    }
-    else
-    {
-        UIControl *currentIndexItem = [self.itemViews objectAtIndex:self.currentIndex];
-        [self.itemViews insertObject:object atIndex:index];
-        self.currentIndex = [self.itemViews indexOfObjectIdenticalTo:currentIndexItem];
-    }
-    
-    [self layoutItemViews];
-}
-
-- (void)removeObjectFromItemViewsAtIndex:(NSUInteger)index
-{
-    if ([self.itemViews count] == 0)
+    if (items == nil || [items count] == 0)
     {
         return;
     }
     
-    [[self.itemViews objectAtIndex:index] removeFromSuperview];
-    
-    UIControl *currentIndexItem = [self.itemViews objectAtIndex:self.currentIndex];
-    [self.itemViews removeObjectAtIndex:index];
-    if (index == self.currentIndex)
+    if ([self.buttons count] != 0)
     {
-        self.currentIndex = 0;
-    }
-    else
-    {
-        self.currentIndex = [self.itemViews indexOfObjectIdenticalTo:currentIndexItem];
-    }
-    
-    [self layoutItemViews];
-}
-
-- (void)setItemViews:(NSMutableArray *)itemViews
-{
-    if (itemViews == nil || [itemViews count] == 0)
-    {
-        return;
-    }
-    
-    if (_itemViews != nil)
-    {
-        for (UIControl *itemView in _itemViews)
+        for (CRScrollMenuButton *button in self.buttons)
         {
-            [itemView removeFromSuperview];
+            [button removeFromSuperview];
         }
+        [self.buttons removeAllObjects];
+    }
+    
+    for (CRScrollMenuItem *item in items)
+    {
+        CRScrollMenuButton *button = [self buttonByItem:item];
+        [self.buttons addObject:button];
     }
     
     self.currentIndex = 0;
     
-    _itemViews = [NSMutableArray arrayWithArray:itemViews];
-    for (UIControl *itemView in itemViews)
-    {
-        [self setupItemView:itemView];
-    }
-    [[_itemViews objectAtIndex:self.currentIndex] setSelected:YES];
-    
-    [self layoutItemViews];
+    [self layoutSubviews];
 }
 
-- (void)setupItemView:(UIControl *)itemView
+- (void)insertButtonByItem:(CRScrollMenuItem *)item atIndex:(NSUInteger)index
 {
-    itemView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [itemView addTarget:self
-                 action:@selector(onItemViewClicked:)
-       forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView addSubview:itemView];
+    CRScrollMenuButton *button = [self buttonByItem:item];
+    
+    if ([self.buttons count] == 0)
+    {
+        [self.buttons addObject:button];
+    }
+    else
+    {
+        CGPoint contentOffset = self.contentView.contentOffset;
+        if (index <= self.currentIndex)
+        {
+            contentOffset.x += button.frame.size.width;
+            self.contentView.contentOffset = contentOffset;
+        }
+        
+        CRScrollMenuButton *currentIndexButton = [self.buttons objectAtIndex:self.currentIndex];
+        [self.buttons insertObject:button atIndex:index];
+        self.currentIndex = [self.buttons indexOfObjectIdenticalTo:currentIndexButton];
+        
+    }
+    
+    [self layoutSubviews];
+}
+
+- (void)removeButtonAtIndex:(NSUInteger)index
+{
+    if ([self.buttons count] == 0)
+    {
+        return;
+    }
+    
+    [[self.buttons objectAtIndex:index] removeFromSuperview];
+    
+    CGPoint contentOffset = self.contentView.contentOffset;
+    float removedButtonWidth = [[self.buttons objectAtIndex:index] frame].size.width;
+    
+    CRScrollMenuButton *currentIndexButton = [self.buttons objectAtIndex:self.currentIndex];
+    [self.buttons removeObjectAtIndex:index];
+    if (index == self.currentIndex) // 若删除的项是当前选择项，则回到第一项
+    {
+        self.currentIndex = 0;
+        
+        contentOffset.x = 0;
+        self.contentView.contentOffset = contentOffset;
+    }
+    else
+    {
+        if (index < self.currentIndex)
+        {
+            contentOffset.x -= removedButtonWidth;
+            self.contentView.contentOffset = contentOffset;
+        }
+        
+        // 更新currentIndex
+        self.currentIndex = [self.buttons indexOfObjectIdenticalTo:currentIndexButton];
+    }
+    
+    [self layoutSubviews];
+}
+
+- (CRScrollMenuButton *)buttonByItem:(CRScrollMenuItem *)item
+{
+    CGSize titleSize = [item.title sizeWithAttributes:self.normalTitleAttributes];
+    CRScrollMenuButton *button = [[CRScrollMenuButton alloc] initWithFrame:CGRectMake(0,
+                                                                                      0,
+                                                                                      titleSize.width + 2 * self.buttonPadding,
+                                                                                      titleSize.height)];
+    button.title = item.title;
+    button.subtitle = item.subtitle;
+    button.normalTitleAttributes = self.normalTitleAttributes;
+    button.selectedTitleAttributes = self.selectedTitleAttributes;
+    button.normalSubtitleAttributes = self.normalSubtitleAttributes;
+    button.selectedSubtitleAttributes = self.selectedSubtitleAttributes;
+    button.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    [button addTarget:self
+               action:@selector(onItemViewClicked:)
+     forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.contentView addSubview:button];
+    
+    return button;
+}
+
+#pragma mark - overwritten setters
+
+- (void)setIndicatorHeight:(NSUInteger)indicatorHeight
+{
+    CGRect rect = self.indicatorView.frame;
+    rect.origin.y = CGRectGetHeight(self.bounds) - indicatorHeight;
+    rect.size.height = indicatorHeight;
+    self.indicatorView.frame = rect;
+    
+    _indicatorHeight = indicatorHeight;
+}
+
+- (void)setIndicatorColor:(UIColor *)indicatorColor
+{
+    self.indicatorView.backgroundColor = indicatorColor;
+    _indicatorColor = indicatorColor;
+}
+
+- (void)setBackgroundImage:(UIImage *)backgroundImage
+{
+    if (_backgroundImageView == nil)
+    {
+        _backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self insertSubview:_backgroundImageView belowSubview:self.contentView];
+    }
+    
+    _backgroundImage = backgroundImage;
+    _backgroundImageView.image = backgroundImage;
 }
 
 @end

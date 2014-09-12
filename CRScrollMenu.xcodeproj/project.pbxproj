@@ -24,6 +24,7 @@
 		D27A58DB19A4A6050083A604 /* CRScrollMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = D27A58DA19A4A6050083A604 /* CRScrollMenu.m */; };
 		D27A58E419AA1CBC0083A604 /* CRScrollMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D27A58E319AA1CBC0083A604 /* CRScrollMenuButton.m */; };
 		D27A58E619AA46960083A604 /* scrollmenu_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D27A58E519AA46960083A604 /* scrollmenu_background@2x.png */; };
+		D2D0CC4E19C3404B007430F7 /* CRScrollMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D0CC4D19C3404B007430F7 /* CRScrollMenuItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,8 @@
 		D27A58E219AA1CBC0083A604 /* CRScrollMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRScrollMenuButton.h; path = CRScrollMenu/CRScrollMenuButton.h; sourceTree = "<group>"; };
 		D27A58E319AA1CBC0083A604 /* CRScrollMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRScrollMenuButton.m; path = CRScrollMenu/CRScrollMenuButton.m; sourceTree = "<group>"; };
 		D27A58E519AA46960083A604 /* scrollmenu_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scrollmenu_background@2x.png"; sourceTree = "<group>"; };
+		D2D0CC4C19C3404B007430F7 /* CRScrollMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CRScrollMenuItem.h; path = CRScrollMenu/CRScrollMenuItem.h; sourceTree = "<group>"; };
+		D2D0CC4D19C3404B007430F7 /* CRScrollMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CRScrollMenuItem.m; path = CRScrollMenu/CRScrollMenuItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +172,8 @@
 				D27A58DA19A4A6050083A604 /* CRScrollMenu.m */,
 				D27A58E219AA1CBC0083A604 /* CRScrollMenuButton.h */,
 				D27A58E319AA1CBC0083A604 /* CRScrollMenuButton.m */,
+				D2D0CC4C19C3404B007430F7 /* CRScrollMenuItem.h */,
+				D2D0CC4D19C3404B007430F7 /* CRScrollMenuItem.m */,
 			);
 			name = CRScrollMenu;
 			sourceTree = "<group>";
@@ -277,6 +282,7 @@
 				D27A58DB19A4A6050083A604 /* CRScrollMenu.m in Sources */,
 				D27A58E419AA1CBC0083A604 /* CRScrollMenuButton.m in Sources */,
 				D27A58BB19A4A5C20083A604 /* CRViewController.m in Sources */,
+				D2D0CC4E19C3404B007430F7 /* CRScrollMenuItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

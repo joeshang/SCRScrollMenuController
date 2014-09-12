@@ -59,17 +59,11 @@
     
     if (self.title && [self.title length])
     {
-        titleSize = [self.title boundingRectWithSize:self.bounds.size
-                                             options:NSStringDrawingUsesLineFragmentOrigin
-                                          attributes:titleAttributes
-                                             context:nil].size;
+        titleSize = [self.title sizeWithAttributes:titleAttributes];
         
         if (self.subtitle && [self.subtitle length])
         {
-            subtitleSize = [self.subtitle boundingRectWithSize:self.bounds.size
-                                                       options:NSStringDrawingUsesLineFragmentOrigin
-                                                    attributes:subtitleAttributes
-                                                       context:nil].size;
+            subtitleSize = [self.subtitle sizeWithAttributes:subtitleAttributes];
             float y = roundf((self.bounds.size.height - titleSize.height - subtitleSize.height - self.titlePaddingY) / 2);
             [self.title drawInRect:CGRectMake(roundf((self.bounds.size.width - titleSize.width) / 2),
                                               y,

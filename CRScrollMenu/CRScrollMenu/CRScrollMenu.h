@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CRScrollMenuItem.h"
 
 @class CRScrollMenu;
 @protocol CRScrollMenuDelegate <NSObject>
@@ -18,14 +19,22 @@
 @interface CRScrollMenu : UIView
 
 @property (nonatomic, strong) UIImage *backgroundImage;
-@property (nonatomic, strong) NSMutableArray *itemViews;
+@property (nonatomic, assign) NSUInteger buttonPadding;
+@property (nonatomic, assign) NSUInteger indicatorHeight;
+@property (nonatomic, strong) UIColor *indicatorColor;
+
+@property (nonatomic, strong) NSDictionary *normalTitleAttributes;
+@property (nonatomic, strong) NSDictionary *selectedTitleAttributes;
+@property (nonatomic, strong) NSDictionary *normalSubtitleAttributes;
+@property (nonatomic, strong) NSDictionary *selectedSubtitleAttributes;
+
 @property (nonatomic, weak)   id<CRScrollMenuDelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame;
-- (id)initWithFrame:(CGRect)frame andItemViews:(NSMutableArray *)itemViews;
 
-- (void)insertObject:(UIControl*)object inItemViewsAtIndex:(NSUInteger)index;
-- (void)removeObjectFromItemViewsAtIndex:(NSUInteger)index;
+- (void)setButtonsByItems:(NSArray *)items;
+- (void)insertButtonByItem:(CRScrollMenuItem *)item atIndex:(NSUInteger)index;
+- (void)removeButtonAtIndex:(NSUInteger)index;
 
 - (void)scrollToIndex:(NSUInteger)index;
 
