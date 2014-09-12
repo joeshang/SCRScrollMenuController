@@ -33,8 +33,6 @@
     if (self)
     {
         [self commonSetup];
-        
-        _itemViews = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -216,6 +214,11 @@
 
 - (void)setItemViews:(NSMutableArray *)itemViews
 {
+    if (itemViews == nil || [itemViews count] == 0)
+    {
+        return;
+    }
+    
     if (_itemViews != nil)
     {
         for (UIControl *itemView in _itemViews)

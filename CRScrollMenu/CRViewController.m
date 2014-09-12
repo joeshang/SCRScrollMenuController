@@ -35,7 +35,8 @@
         CRScrollMenuButton *button = [[CRScrollMenuButton alloc] initWithFrame:buttonRect];
         button.normalTitleAttributes = normalAttributes;
         button.selectedTitleAttributes = selectedAttributes;
-        [button setTitle:title forState:UIControlStateNormal];
+        button.title = title;
+        button.subtitle = @"testing";
         [itemViews addObject:button];
     }
     CGRect rect = CGRectMake(0, 60, CGRectGetWidth(self.view.bounds), 60);
@@ -57,8 +58,7 @@
     CGRect buttonRect = CGRectZero;
     buttonRect.size.width = 100;
     CRScrollMenuButton *button = [[CRScrollMenuButton alloc] initWithFrame:buttonRect];
-    [button setTitle:@"测试增" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
+    button.title = @"测试增加";
     
     [self.menu insertObject:button inItemViewsAtIndex:0];
 }

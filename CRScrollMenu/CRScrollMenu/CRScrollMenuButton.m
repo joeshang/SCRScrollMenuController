@@ -16,47 +16,80 @@
     
     if (self)
     {
+        [self commonSetup];
     }
     
     return self;
 }
 
-- (void)setNormalTitleAttributes:(NSDictionary *)normalTitleAttributes
+- (void)commonSetup
 {
-    _normalTitleAttributes = normalTitleAttributes;
-    [self setTitleColor:normalTitleAttributes[NSForegroundColorAttributeName] forState:UIControlStateNormal];
-    if (self.isSelected == NO)
-    {
-        self.titleLabel.font = normalTitleAttributes[NSFontAttributeName];
-    }
-}
-
-- (void)setSelectedTitleAttributes:(NSDictionary *)selectedTitleAttributes
-{
-    _selectedTitleAttributes = selectedTitleAttributes;
-    [self setTitleColor:selectedTitleAttributes[NSForegroundColorAttributeName] forState:UIControlStateSelected];
-    if (self.isSelected == YES)
-    {
-        self.titleLabel.font = selectedTitleAttributes[NSFontAttributeName];
-    }
-}
-
-- (void)setSelected:(BOOL)selected
-{
-    [super setSelected:selected];
+    self.backgroundColor = [UIColor clearColor];
     
-    if (selected)
+    _titlePaddingY = 0;
+    _normalTitleAttributes = @{
+                               NSFontAttributeName: [UIFont systemFontOfSize:17],
+                               NSForegroundColorAttributeName: [UIColor redColor]
+                               };
+    _normalSubtitleAttributes = @{
+                                  NSFontAttributeName: [UIFont systemFontOfSize:12],
+                                  NSForegroundColorAttributeName: [UIColor blueColor]
+                                  };
+    _selectedTitleAttributes = [_normalTitleAttributes copy];
+    _selectedSubtitleAttributes = [_normalSubtitleAttributes copy];
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    CGSize titleSize = CGSizeZero;
+    CGSize subtitleSize = CGSizeZero;
+    NSDictionary *titleAttributes = nil;
+    NSDictionary *subtitleAttributes = nil;
+    
+    if (self.isSelected)
     {
-        if (self.selectedTitleAttributes[NSFontAttributeName])
-        {
-            self.titleLabel.font = self.selectedTitleAttributes[NSFontAttributeName];
-        }
+        titleAttributes = self.selectedTitleAttributes;
+        subtitleAttributes = self.selectedSubtitleAttributes;
     }
     else
     {
-        if (self.normalTitleAttributes[NSFontAttributeName])
+        titleAttributes = self.normalTitleAttributes;
+        subtitleAttributes = self.normalSubtitleAttributes;
+    }
+    
+    if (self.title && [self.title length])
+    {
+        titleSize = [self.title boundingRectWithSize:self.bounds.size
+                                             options:NSStringDrawingUsesLineFragmentOrigin
+                                          attributes:titleAttributes
+                                             context:nil].size;
+        
+        if (self.subtitle && [self.subtitle length])
         {
-            self.titleLabel.font = self.normalTitleAttributes[NSFontAttributeName];
+            subtitleSize = [self.subtitle boundingRectWithSize:self.bounds.size
+                                                       options:NSStringDrawingUsesLineFragmentOrigin
+                                                    attributes:subtitleAttributes
+                                                       context:nil].size;
+            float y = roundf((self.bounds.size.height - titleSize.height - subtitleSize.height - self.titlePaddingY) / 2);
+            [self.title drawInRect:CGRectMake(roundf((self.bounds.size.width - titleSize.width) / 2),
+                                              y,
+                                              titleSize.width,
+                                              titleSize.height)
+                    withAttributes:titleAttributes];
+            [self.subtitle drawInRect:CGRectMake(roundf((self.bounds.size.width - subtitleSize.width) / 2),
+                                                 y + titleSize.height + self.titlePaddingY,
+                                                 subtitleSize.width,
+                                                 subtitleSize.height)
+                       withAttributes:subtitleAttributes];
+        }
+        else
+        {
+            [self.title drawInRect:CGRectMake(roundf((self.bounds.size.width - titleSize.width) / 2),
+                                              roundf((self.bounds.size.height - titleSize.height) / 2),
+                                              titleSize.width,
+                                              titleSize.height)
+                    withAttributes:titleAttributes];
+            
         }
     }
 }
