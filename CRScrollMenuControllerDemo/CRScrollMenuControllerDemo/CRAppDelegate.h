@@ -1,8 +1,8 @@
 //
 //  CRAppDelegate.h
-//  CRScrollMenu
+//  CRScrollMenuControllerDemo
 //
-//  Created by Joe Shang on 8/20/14.
+//  Created by Joe Shang on 9/14/14.
 //  Copyright (c) 2014 Shang Chuanren. All rights reserved.
 //
 

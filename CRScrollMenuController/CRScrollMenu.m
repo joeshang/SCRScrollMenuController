@@ -9,7 +9,7 @@
 #import "CRScrollMenu.h"
 #import "CRScrollMenuButton.h"
 
-#define kCRScrollMenuScrollAnimationTime            0.3
+#define kCRScrollMenuScrollAnimationTime            0.2
 #define kCRScrollMenuIndicatorMargin                5.0
 #define kCRScrollMenuDefaultButtonPadding           8.0
 #define kCRScrollMenuDefaultIndicatorHeight         4.0

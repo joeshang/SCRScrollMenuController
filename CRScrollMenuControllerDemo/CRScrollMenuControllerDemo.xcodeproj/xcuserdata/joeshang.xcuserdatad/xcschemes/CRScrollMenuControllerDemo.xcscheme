@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D27A58A019A4A5C20083A604"
-               BuildableName = "CRScrollMenu.app"
-               BlueprintName = "CRScrollMenu"
-               ReferencedContainer = "container:CRScrollMenu.xcodeproj">
+               BlueprintIdentifier = "D273A36F19C5D8A40081BB37"
+               BuildableName = "CRScrollMenuControllerDemo.app"
+               BlueprintName = "CRScrollMenuControllerDemo"
+               ReferencedContainer = "container:CRScrollMenuControllerDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,20 +32,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D27A58C119A4A5C20083A604"
-               BuildableName = "CRScrollMenuTests.xctest"
-               BlueprintName = "CRScrollMenuTests"
-               ReferencedContainer = "container:CRScrollMenu.xcodeproj">
+               BlueprintIdentifier = "D273A39019C5D8A40081BB37"
+               BuildableName = "CRScrollMenuControllerDemoTests.xctest"
+               BlueprintName = "CRScrollMenuControllerDemoTests"
+               ReferencedContainer = "container:CRScrollMenuControllerDemo.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D27A58A019A4A5C20083A604"
-            BuildableName = "CRScrollMenu.app"
-            BlueprintName = "CRScrollMenu"
-            ReferencedContainer = "container:CRScrollMenu.xcodeproj">
+            BlueprintIdentifier = "D273A36F19C5D8A40081BB37"
+            BuildableName = "CRScrollMenuControllerDemo.app"
+            BlueprintName = "CRScrollMenuControllerDemo"
+            ReferencedContainer = "container:CRScrollMenuControllerDemo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -61,10 +61,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D27A58A019A4A5C20083A604"
-            BuildableName = "CRScrollMenu.app"
-            BlueprintName = "CRScrollMenu"
-            ReferencedContainer = "container:CRScrollMenu.xcodeproj">
+            BlueprintIdentifier = "D273A36F19C5D8A40081BB37"
+            BuildableName = "CRScrollMenuControllerDemo.app"
+            BlueprintName = "CRScrollMenuControllerDemo"
+            ReferencedContainer = "container:CRScrollMenuControllerDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -79,10 +79,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D27A58A019A4A5C20083A604"
-            BuildableName = "CRScrollMenu.app"
-            BlueprintName = "CRScrollMenu"
-            ReferencedContainer = "container:CRScrollMenu.xcodeproj">
+            BlueprintIdentifier = "D273A36F19C5D8A40081BB37"
+            BuildableName = "CRScrollMenuControllerDemo.app"
+            BlueprintName = "CRScrollMenuControllerDemo"
+            ReferencedContainer = "container:CRScrollMenuControllerDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
