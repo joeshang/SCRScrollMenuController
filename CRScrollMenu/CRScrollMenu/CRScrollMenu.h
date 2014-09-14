@@ -18,11 +18,13 @@
 
 @interface CRScrollMenu : UIView
 
-@property (nonatomic, strong) UIImage *backgroundImage;
-@property (nonatomic, assign) NSUInteger buttonPadding;
-@property (nonatomic, assign) NSUInteger indicatorHeight;
-@property (nonatomic, strong) UIColor *indicatorColor;
+@property (nonatomic, strong) UIImage      *backgroundImage;
 
+@property (nonatomic, assign) NSUInteger    indicatorHeight;
+@property (nonatomic, strong) UIColor      *indicatorColor;
+
+@property (nonatomic, assign) NSUInteger    buttonPadding;
+@property (nonatomic, assign) NSUInteger    buttonTitleSpacing;
 @property (nonatomic, strong) NSDictionary *normalTitleAttributes;
 @property (nonatomic, strong) NSDictionary *selectedTitleAttributes;
 @property (nonatomic, strong) NSDictionary *normalSubtitleAttributes;

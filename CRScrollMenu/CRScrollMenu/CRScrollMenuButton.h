@@ -13,11 +13,11 @@
 @property (nonatomic, copy)   NSString *title;
 @property (nonatomic, copy)   NSString *subtitle;
 
+@property (nonatomic, assign) NSUInteger titleSpacing;
+
 @property (nonatomic, strong) NSDictionary *normalTitleAttributes;
 @property (nonatomic, strong) NSDictionary *selectedTitleAttributes;
 @property (nonatomic, strong) NSDictionary *normalSubtitleAttributes;
 @property (nonatomic, strong) NSDictionary *selectedSubtitleAttributes;
-
-@property (nonatomic, assign) NSUInteger titlePaddingY;
 
 @end

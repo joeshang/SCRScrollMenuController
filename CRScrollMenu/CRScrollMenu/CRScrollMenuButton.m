@@ -8,6 +8,8 @@
 
 #import "CRScrollMenuButton.h"
 
+#define kCRScrollMenuDefaultTitleSpaing            0
+
 @implementation CRScrollMenuButton
 
 - (id)initWithFrame:(CGRect)frame
@@ -26,7 +28,7 @@
 {
     self.backgroundColor = [UIColor clearColor];
     
-    _titlePaddingY = 0;
+    _titleSpacing = kCRScrollMenuDefaultTitleSpaing;
     _normalTitleAttributes = @{
                                NSFontAttributeName: [UIFont systemFontOfSize:17],
                                NSForegroundColorAttributeName: [UIColor redColor]
@@ -64,14 +66,14 @@
         if (self.subtitle && [self.subtitle length])
         {
             subtitleSize = [self.subtitle sizeWithAttributes:subtitleAttributes];
-            float y = roundf((self.bounds.size.height - titleSize.height - subtitleSize.height - self.titlePaddingY) / 2);
+            float y = roundf((self.bounds.size.height - titleSize.height - subtitleSize.height - self.titleSpacing) / 2);
             [self.title drawInRect:CGRectMake(roundf((self.bounds.size.width - titleSize.width) / 2),
                                               y,
                                               titleSize.width,
                                               titleSize.height)
                     withAttributes:titleAttributes];
             [self.subtitle drawInRect:CGRectMake(roundf((self.bounds.size.width - subtitleSize.width) / 2),
-                                                 y + titleSize.height + self.titlePaddingY,
+                                                 y + titleSize.height + self.titleSpacing,
                                                  subtitleSize.width,
                                                  subtitleSize.height)
                        withAttributes:subtitleAttributes];

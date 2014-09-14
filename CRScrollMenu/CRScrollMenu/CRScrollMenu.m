@@ -62,17 +62,6 @@
     _indicatorColor = kCRScrollMenuDefaultIndicatorColor;
     _indicatorHeight = kCRScrollMenuDefaultIndicatorHeight;
     
-    _normalTitleAttributes = @{
-                               NSFontAttributeName: [UIFont systemFontOfSize:17],
-                               NSForegroundColorAttributeName: [UIColor redColor]
-                               };
-    _normalSubtitleAttributes = @{
-                                  NSFontAttributeName: [UIFont systemFontOfSize:12],
-                                  NSForegroundColorAttributeName: [UIColor blueColor]
-                                  };
-    _selectedTitleAttributes = [_normalTitleAttributes copy];
-    _selectedSubtitleAttributes = [_normalSubtitleAttributes copy];
-    
     _contentView = [[UIScrollView alloc] initWithFrame:self.bounds];
     _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _contentView.showsHorizontalScrollIndicator = NO;
@@ -272,10 +261,26 @@
                                                                                       titleSize.height)];
     button.title = item.title;
     button.subtitle = item.subtitle;
-    button.normalTitleAttributes = self.normalTitleAttributes;
-    button.selectedTitleAttributes = self.selectedTitleAttributes;
-    button.normalSubtitleAttributes = self.normalSubtitleAttributes;
-    button.selectedSubtitleAttributes = self.selectedSubtitleAttributes;
+    if (self.buttonTitleSpacing)
+    {
+        button.titleSpacing = self.buttonTitleSpacing;
+    }
+    if (self.normalTitleAttributes)
+    {
+        button.normalTitleAttributes = self.normalTitleAttributes;
+    }
+    if (self.selectedTitleAttributes)
+    {
+        button.selectedTitleAttributes = self.selectedTitleAttributes;
+    }
+    if (self.normalSubtitleAttributes)
+    {
+        button.normalSubtitleAttributes = self.normalSubtitleAttributes;
+    }
+    if (self.selectedSubtitleAttributes)
+    {
+        button.selectedSubtitleAttributes = self.selectedSubtitleAttributes;
+    }
     button.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     [button addTarget:self
                action:@selector(onItemViewClicked:)
