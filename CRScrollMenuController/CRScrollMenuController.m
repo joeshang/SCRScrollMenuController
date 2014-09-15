@@ -47,7 +47,33 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self layoutSubviews];
+}
+
+- (void)layoutSubviews
+{
+    self.scrollMenu.frame = CGRectMake(0,
+                                       0,
+                                       CGRectGetWidth(self.view.bounds),
+                                       self.scrollMenuHeight);
+    self.scrollView.frame = CGRectMake(0,
+                                       self.scrollMenuHeight,
+                                       CGRectGetWidth(self.view.bounds),
+                                       CGRectGetHeight(self.view.bounds) - self.scrollMenuHeight);
+    [self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *childController, NSUInteger index, BOOL *stop){
+        childController.view.frame = CGRectMake(index * CGRectGetWidth(self.scrollView.bounds),
+                                                0,
+                                                CGRectGetWidth(self.scrollView.bounds),
+                                                CGRectGetHeight(self.scrollView.bounds));
+    }];
+    self.scrollView.contentSize = CGSizeMake([self.viewControllers count] * CGRectGetWidth(self.scrollView.bounds), CGRectGetHeight(self.scrollView.bounds));
+    self.scrollView.contentOffset = CGPointMake(self.currentIndex * CGRectGetWidth(self.scrollView.bounds), 0);
 }
 
 #pragma mark - overwritten getters/setters
@@ -57,9 +83,9 @@
     if (_scrollView == nil)
     {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,
-                                                                         self.scrollMenuHeight,
-                                                                         CGRectGetWidth(self.view.bounds),
-                                                                         CGRectGetHeight(self.view.bounds) - self.scrollMenuHeight)];
+                                                                     self.scrollMenuHeight,
+                                                                     CGRectGetWidth(self.view.bounds),
+                                                                     CGRectGetHeight(self.view.bounds) - self.scrollMenuHeight)];
         _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _scrollView.delegate = self;
         _scrollView.pagingEnabled = YES;
@@ -95,10 +121,10 @@
     
     if (_currentIndex != currentIndex)
     {
+        _currentIndex = currentIndex;
+        
         [self.scrollMenu scrollToIndex:currentIndex];
         [self.scrollView setContentOffset:CGPointMake(currentIndex * self.scrollView.bounds.size.width, 0.) animated:YES];
-    
-        _currentIndex = currentIndex;
     }
 }
 
@@ -106,18 +132,8 @@
 {
     if (_scrollMenuHeight != scrollMenuHeight)
     {
-        self.scrollMenu.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), scrollMenuHeight);
-        self.scrollView.frame = CGRectMake(0,
-                                           scrollMenuHeight,
-                                           CGRectGetWidth(self.view.bounds),
-                                           CGRectGetHeight(self.view.bounds) - scrollMenuHeight);
-        for (UIViewController *childController in self.viewControllers)
-        {
-            CGRect rect = childController.view.frame;
-            rect.size.height = CGRectGetHeight(self.view.bounds) - scrollMenuHeight;
-            childController.view.frame = rect;
-        }
         _scrollMenuHeight = scrollMenuHeight;
+        [self layoutSubviews];
     }
 }
 
@@ -184,14 +200,9 @@
         
         [viewControllers enumerateObjectsUsingBlock:^(UIViewController *childController, NSUInteger index, BOOL *stop){
             [self addChildViewController:childController];
-            childController.view.frame = CGRectMake(index * CGRectGetWidth(self.scrollView.bounds),
-                                                    0,
-                                                    CGRectGetWidth(self.scrollView.bounds),
-                                                    CGRectGetHeight(self.scrollView.bounds));
             [self.scrollView addSubview:childController.view];
             [childController didMoveToParentViewController:self];
         }];
-        self.scrollView.contentSize = CGSizeMake([viewControllers count] * CGRectGetWidth(self.scrollView.bounds), CGRectGetHeight(self.scrollView.bounds));
         
         [self.scrollMenu setButtonsByItems:items];
         
@@ -211,25 +222,6 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     self.currentIndex = scrollView.contentOffset.x / CGRectGetWidth(self.scrollView.bounds);
-    self.scrollView.userInteractionEnabled = YES;
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if (!decelerate)
-    {
-        self.scrollView.userInteractionEnabled = YES;
-    }
-}
-
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-{
-    self.scrollView.userInteractionEnabled = YES;
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    self.scrollView.userInteractionEnabled = NO;
 }
 
 @end
