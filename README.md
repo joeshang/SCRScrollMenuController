@@ -47,7 +47,7 @@ CRScrollMenu由以下模块组成：
 ## 4. TODO
 
 - 点击菜单项时，CRScrollMenu内部ScrollView的contentOffset的移动算法需要优化
-- 使用KVO，ContentView在滑动时，CRScrollMenu的指示标志应该随之动态滑动
+- ~~使用KVO，ContentView在滑动时，CRScrollMenu的指示标志应该随之动态滑动~~
 
 ## 5. 作者
 

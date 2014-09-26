@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "CRScrollMenuController"
-  s.version      = "0.2"
+  s.version      = "0.3"
   s.summary      = "A container view controller with scrollable menu and scrollable content"
 
   s.description  = <<-DESC
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.license      = "MIT" 
   s.author       = { "Joe Shang" => "shangchuanren@gmail.com" }
   s.platform     = :ios, "7.0"
-  s.source       = { :git => "https://github.com/joeshang/CRScrollMenuController.git", :tag => "0.2" }
+  s.source       = { :git => "https://github.com/joeshang/CRScrollMenuController.git", :tag => "0.3" }
   s.source_files = "CRScrollMenu""
   s.requires_arc = true
 

@@ -39,5 +39,8 @@
 - (void)removeButtonAtIndex:(NSUInteger)index;
 
 - (void)scrollToIndex:(NSUInteger)index;
+- (void)moveToIndex:(NSUInteger)index progress:(CGFloat)progress;
+
+- (NSUInteger)currentIndex;
 
 @end
