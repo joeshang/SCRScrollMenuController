@@ -150,7 +150,7 @@
 
 - (void)setScrollMenuBackgroundColor:(UIColor *)scrollMenuBackgroundColor
 {
-    self.scrollMenuBackgroundColor = scrollMenuBackgroundColor;
+    self.scrollMenu.backgroundColor = scrollMenuBackgroundColor;
 }
 
 - (void)setScrollMenuBackgroundImage:(UIImage *)scrollMenuBackgroundImage
