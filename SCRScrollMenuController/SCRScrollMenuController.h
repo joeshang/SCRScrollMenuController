@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CRScrollMenu.h"
+#import "SCRScrollMenu.h"
 
-@interface CRScrollMenuController : UIViewController
+@interface SCRScrollMenuController : UIViewController
 
 @property (nonatomic, strong) NSArray *viewControllers;
 

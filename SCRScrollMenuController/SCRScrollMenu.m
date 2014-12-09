@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Shang Chuanren. All rights reserved.
 //
 
-#import "CRScrollMenu.h"
-#import "CRScrollMenuButton.h"
+#import "SCRScrollMenu.h"
+#import "SCRScrollMenuButton.h"
 
 #define kCRScrollMenuScrollAnimationTime            0.2
 #define kCRScrollMenuIndicatorMargin                5.0
@@ -15,7 +15,7 @@
 #define kCRScrollMenuDefaultIndicatorHeight         4.0
 #define kCRScrollMenuDefaultIndicatorColor          [UIColor redColor]
 
-@interface CRScrollMenu()
+@interface SCRScrollMenu()
 
 @property (nonatomic, strong) UIScrollView *contentView;
 @property (nonatomic, strong) UIView *indicatorView;
@@ -25,7 +25,7 @@
 
 @end
 
-@implementation CRScrollMenu
+@implementation SCRScrollMenu
 
 #pragma mark - life cycle
 
@@ -80,7 +80,7 @@
 {
     CGFloat x = 0.0;
     
-    for (CRScrollMenuButton *button in self.buttons)
+    for (SCRScrollMenuButton *button in self.buttons)
     {
         CGRect rect = button.frame;
         rect.origin.x = x;
@@ -186,16 +186,16 @@
     
     if ([self.buttons count] != 0)
     {
-        for (CRScrollMenuButton *button in self.buttons)
+        for (SCRScrollMenuButton *button in self.buttons)
         {
             [button removeFromSuperview];
         }
         [self.buttons removeAllObjects];
     }
     
-    for (CRScrollMenuItem *item in items)
+    for (SCRScrollMenuItem *item in items)
     {
-        CRScrollMenuButton *button = [self buttonByItem:item];
+        SCRScrollMenuButton *button = [self buttonByItem:item];
         [self.buttons addObject:button];
     }
     
@@ -204,9 +204,9 @@
     [self layoutSubviews];
 }
 
-- (void)insertButtonByItem:(CRScrollMenuItem *)item atIndex:(NSUInteger)index
+- (void)insertButtonByItem:(SCRScrollMenuItem *)item atIndex:(NSUInteger)index
 {
-    CRScrollMenuButton *button = [self buttonByItem:item];
+    SCRScrollMenuButton *button = [self buttonByItem:item];
     
     if ([self.buttons count] == 0)
     {
@@ -221,7 +221,7 @@
             self.contentView.contentOffset = contentOffset;
         }
         
-        CRScrollMenuButton *currentIndexButton = [self.buttons objectAtIndex:self.currentIndex];
+        SCRScrollMenuButton *currentIndexButton = [self.buttons objectAtIndex:self.currentIndex];
         [self.buttons insertObject:button atIndex:index];
         self.currentIndex = [self.buttons indexOfObjectIdenticalTo:currentIndexButton];
         
@@ -242,7 +242,7 @@
     CGPoint contentOffset = self.contentView.contentOffset;
     float removedButtonWidth = [[self.buttons objectAtIndex:index] frame].size.width;
     
-    CRScrollMenuButton *currentIndexButton = [self.buttons objectAtIndex:self.currentIndex];
+    SCRScrollMenuButton *currentIndexButton = [self.buttons objectAtIndex:self.currentIndex];
     [self.buttons removeObjectAtIndex:index];
     if (index == self.currentIndex) // 若删除的项是当前选择项，则回到第一项
     {
@@ -266,10 +266,10 @@
     [self layoutSubviews];
 }
 
-- (CRScrollMenuButton *)buttonByItem:(CRScrollMenuItem *)item
+- (SCRScrollMenuButton *)buttonByItem:(SCRScrollMenuItem *)item
 {
     CGSize titleSize = [item.title sizeWithAttributes:self.normalTitleAttributes];
-    CRScrollMenuButton *button = [[CRScrollMenuButton alloc] initWithFrame:CGRectMake(0,
+    SCRScrollMenuButton *button = [[SCRScrollMenuButton alloc] initWithFrame:CGRectMake(0,
                                                                                       0,
                                                                                       titleSize.width + 2 * self.buttonPadding,
                                                                                       titleSize.height)];

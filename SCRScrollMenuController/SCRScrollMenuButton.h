@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CRScrollMenuButton : UIControl
+@interface SCRScrollMenuButton : UIControl
 
 @property (nonatomic, copy)   NSString *title;
 @property (nonatomic, copy)   NSString *subtitle;

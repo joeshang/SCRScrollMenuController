@@ -6,20 +6,20 @@
 //  Copyright (c) 2014 Shang Chuanren. All rights reserved.
 //
 
-#import "CRScrollMenuController.h"
+#import "SCRScrollMenuController.h"
 
 #define kCRScrollMenuDefaultHeight          44
 
-@interface CRScrollMenuController ()
-< CRScrollMenuDelegate, UIScrollViewDelegate >
+@interface SCRScrollMenuController ()
+< SCRScrollMenuDelegate, UIScrollViewDelegate >
 
 @property (nonatomic, assign) NSUInteger currentIndex;
-@property (nonatomic, strong) CRScrollMenu *scrollMenu;
+@property (nonatomic, strong) SCRScrollMenu *scrollMenu;
 @property (nonatomic, strong) UIScrollView *scrollView;
 
 @end
 
-@implementation CRScrollMenuController
+@implementation SCRScrollMenuController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -110,11 +110,11 @@
     return _scrollView;
 }
 
-- (CRScrollMenu *)scrollMenu
+- (SCRScrollMenu *)scrollMenu
 {
     if (_scrollMenu == nil)
     {
-        _scrollMenu = [[CRScrollMenu alloc] initWithFrame:CGRectMake(0,
+        _scrollMenu = [[SCRScrollMenu alloc] initWithFrame:CGRectMake(0,
                                                                      0,
                                                                      CGRectGetWidth(self.view.bounds),
                                                                      self.scrollMenuHeight)];
@@ -228,7 +228,7 @@
 
 #pragma mark - CRScrollMenu delegate
 
-- (void)scrollMenu:(CRScrollMenu *)scrollMenu didSelectedAtIndex:(NSUInteger)index
+- (void)scrollMenu:(SCRScrollMenu *)scrollMenu didSelectedAtIndex:(NSUInteger)index
 {
     self.currentIndex = index;
     [self.scrollView setContentOffset:CGPointMake(index * self.scrollView.bounds.size.width, 0) animated:YES];
@@ -241,8 +241,7 @@
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    if (self.scrollView.dragging
-        && [keyPath isEqualToString:NSStringFromSelector(@selector(contentOffset))])
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(contentOffset))])
     {
         CGFloat pageScrollOffset = self.scrollView.contentOffset.x - self.currentIndex * CGRectGetWidth(self.scrollView.frame);
         NSInteger targetIndex = (pageScrollOffset > 0) ? self.currentIndex + 1 : self.currentIndex - 1;

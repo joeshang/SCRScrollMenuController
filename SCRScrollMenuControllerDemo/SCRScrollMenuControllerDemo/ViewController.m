@@ -1,27 +1,27 @@
 //
-//  CRViewController.m
-//  CRScrollMenuController
+//  ViewController.m
+//  SCRScrollMenuControllerDemo
 //
-//  Created by Joe Shang on 9/10/14.
+//  Created by Joe Shang on 12/9/14.
 //  Copyright (c) 2014 Shang Chuanren. All rights reserved.
 //
 
-#import "CRViewController.h"
-#import "CRScrollMenuController.h"
+#import "ViewController.h"
+#import "SCRScrollMenuController.h"
 
-@interface CRViewController ()
+@interface ViewController ()
 
-@property (nonatomic, strong) CRScrollMenuController *scrollMenuController;
+@property (nonatomic, strong) SCRScrollMenuController *scrollMenuController;
 
 @end
 
-@implementation CRViewController
+@implementation ViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.scrollMenuController = [[CRScrollMenuController alloc] init];
+    self.scrollMenuController = [[SCRScrollMenuController alloc] init];
     self.scrollMenuController.scrollMenuHeight = 60;
     self.scrollMenuController.scrollMenuBackgroundImage = [UIImage imageNamed:@"scrollmenu_background"];
     self.scrollMenuController.scrollMenuIndicatorColor = [UIColor whiteColor];
@@ -59,7 +59,7 @@
         controller.view.backgroundColor = [colors objectAtIndex:i];
         [viewControllers addObject:controller];
         
-        CRScrollMenuItem *item = [[CRScrollMenuItem alloc] init];
+        SCRScrollMenuItem *item = [[SCRScrollMenuItem alloc] init];
         item.title = [titles objectAtIndex:i];
         item.subtitle = [titles objectAtIndex:i];
         [items addObject:item];

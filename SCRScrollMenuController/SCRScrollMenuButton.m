@@ -1,16 +1,16 @@
 //
-//  CRScrollMenuButton.m
-//  CRScrollMenu
+//  SCRScrollMenuButton.m
+//  SCRScrollMenu
 //
 //  Created by Joe Shang on 8/24/14.
 //  Copyright (c) 2014 Shang Chuanren. All rights reserved.
 //
 
-#import "CRScrollMenuButton.h"
+#import "SCRScrollMenuButton.h"
 
 #define kCRScrollMenuDefaultTitleSpaing            0
 
-@implementation CRScrollMenuButton
+@implementation SCRScrollMenuButton
 
 - (id)initWithFrame:(CGRect)frame
 {
