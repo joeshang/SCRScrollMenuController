@@ -2,8 +2,8 @@
 //  SCRScrollMenuControllerDemoTests.m
 //  SCRScrollMenuControllerDemoTests
 //
-//  Created by Joe Shang on 12/9/14.
-//  Copyright (c) 2014 Shang Chuanren. All rights reserved.
+//  Created by Joe Shang on 6/3/15.
+//  Copyright (c) 2015 Shang Chuanren. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
